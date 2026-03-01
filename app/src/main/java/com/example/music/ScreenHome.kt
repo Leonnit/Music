@@ -30,7 +30,7 @@ private val BgCard     = Color(0xFF13131A)
 private val Gold       = Color(0xFFFFA500)
 private val GoldLight  = Color(0xFFFFD580)
 private val TextWhite  = Color(0xFFFFFFFF)
-private val TextGray   = Color(0xFF8A8A9A)
+val TextGray   = Color(0xFF8A8A9A)
 private val DivColor   = Color(0xFF1E1E2A)
 private val BottomBg   = Color(0xFF0F0F18)
 
@@ -56,15 +56,12 @@ val sampleChansons = List(9) { i ->
 // ─── Écran Accueil ────────────────────────────────────────────────────────────
 @Composable
 fun ScreenHome(
-    modifier: Modifier = Modifier,
-    onMenuClick: () -> Unit = {},
-    onChansonClick: (Chanson) -> Unit = {}
 ) {
     val tabs = listOf("Chasons", "Artistes", "Albums", "Favories")
     var selectedTab by remember { mutableStateOf(0) }
 
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(BgDark)
     ) {
@@ -83,7 +80,7 @@ fun ScreenHome(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // Menu burger
-                    IconButton(onClick = onMenuClick) {
+                    IconButton(onClick ={/*TODO*/}) {
                         Icon(
                             Icons.Default.Menu,
                             contentDescription = "Menu",
@@ -172,7 +169,7 @@ fun ScreenHome(
                 contentPadding = PaddingValues(bottom = 140.dp)
             ) {
                 items(sampleChansons) { chanson ->
-                    ChansonItem(chanson = chanson, onClick = { onChansonClick(chanson) })
+                    ChansonItem(chanson = chanson, onClick = {  /*TODO*/ })
                     HorizontalDivider(color = DivColor, thickness = 0.5.dp, modifier = Modifier.padding(start = 76.dp))
                 }
             }

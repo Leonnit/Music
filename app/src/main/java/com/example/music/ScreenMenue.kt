@@ -180,12 +180,6 @@ fun AccueilAvecMenu() {
     var menuOuvert by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
-
-        // Page principale
-        ScreenHome(
-            onMenuClick = { menuOuvert = true }
-        )
-
         // Menu par-dessus
         if (menuOuvert) {
             MenuScreen(
