@@ -72,7 +72,7 @@ fun Topbarre() {
 
                 )
             }
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(9.dp))
             Box(
                 modifier = Modifier
                     .weight(1f)
