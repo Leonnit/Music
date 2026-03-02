@@ -37,7 +37,7 @@ data class MenuItem(
 
 val menuItems = listOf(
     MenuItem("Parametre",                  Icons.Default.Settings),
-    MenuItem("FAQ et Commentaire",         Icons.Default.HelpOutline),
+    MenuItem("FAQ et Commentaire",         Icons.Default.PriorityHigh),
     MenuItem("Accord Utilisateur",         Icons.Default.Description),
     MenuItem("Politique de confidentialite", Icons.Default.Lock),
     MenuItem("Metre a jour automatiquement", Icons.Default.SystemUpdate),
