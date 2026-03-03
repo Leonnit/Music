@@ -5,6 +5,7 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.core.net.toUri
 
 // ─── Modèle ────────────────────────────────────────────────────────────────────
 data class MusiqueLocale(
@@ -54,7 +55,7 @@ fun getMusiqueLocale(context: Context): List<MusiqueLocale> {
             )
             // ← CORRIGÉ : pochette basée sur ALBUM_ID réel
             val albumUri = ContentUris.withAppendedId(
-                Uri.parse("content://media/external/audio/albumart"), albumId
+                "content://media/external/audio/albumart".toUri(), albumId
             )
             liste.add(
                 MusiqueLocale(
