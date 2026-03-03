@@ -1,4 +1,4 @@
-package com.example.music
+package com.example.music.screen
 
 import android.Manifest
 import android.content.Context
@@ -70,11 +70,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.music.R
+import com.example.music.localpermission.GestionnaireFavoris
+import com.example.music.localpermission.Lecteur
+import com.example.music.localpermission.MusiqueLocale
+import com.example.music.localpermission.getMusiqueLocale
 import com.example.music.ui.theme.DrowerContent
 import com.example.music.ui.theme.ListeAlbums
 import com.example.music.ui.theme.ListeArtistes
 import com.example.music.ui.theme.TopBarre
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 
 object  EtatLecture {
@@ -83,8 +90,9 @@ object  EtatLecture {
     var estAleatoire   by mutableStateOf(false)
     var modeRepetition by mutableIntStateOf(0)
 }
+
 @Composable
-fun Home() {
+fun Home(navController: NavController) {
 
     val context = LocalContext.current
     var permissionOk by remember { mutableStateOf(false) }
@@ -114,46 +122,40 @@ fun Home() {
         drawerContent = {DrowerContent()},
         modifier = Modifier.background(Color(0xFF05070C)),
     ) {
-        Scaffold(
-            containerColor = Color(0xFF05070C),
-            contentWindowInsets = WindowInsets(0.dp),
-            modifier = Modifier.fillMaxSize()
-        ) { innerPadding ->
-            Box(modifier = Modifier.fillMaxSize()){
-                Image(
-                    painter = painterResource(id = R.drawable.fond),
-                    contentDescription = "Fond",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-                Column(modifier = Modifier.padding(innerPadding)) {
-                    if (permissionOk) Contenue(drawerState, scope)
-                    else {
-                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text("Permission requise pour lire la musique", color = Color.Gray)
-                        }
-                    }
-                }
-                AnimatedVisibility(
-                    visible  = EtatLecture.musiqueActive != null,
-                    enter    = slideInVertically { it },
-                    exit     = slideOutVertically { it },
-                    modifier = Modifier.align(Alignment.BottomCenter)
-                ) {
-                    EtatLecture.musiqueActive?.let {
-                        MiniPlayer(
-                            musique = it
-                        )
+        Box(modifier = Modifier.fillMaxSize()){
+            Image(
+                painter = painterResource(id = R.drawable.fond),
+                contentDescription = "Fond",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+            Column(modifier = Modifier.padding(horizontal = 0.dp)) {
+                if (permissionOk) Contenue(drawerState, scope, navController)
+                else {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("Permission requise pour lire la musique", color = Color.Gray)
                     }
                 }
             }
-
+            AnimatedVisibility(
+                visible  = EtatLecture.musiqueActive != null,
+                enter    = slideInVertically { it },
+                exit     = slideOutVertically { it },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            ) {
+                EtatLecture.musiqueActive?.let {
+                    MiniPlayer(
+                        musique = it,
+                        navController = navController
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-fun MiniPlayer(musique: MusiqueLocale) {
+fun MiniPlayer(musique: MusiqueLocale, navController: NavController) {
     val context     = LocalContext.current
     var progression by remember { mutableFloatStateOf(0f) }
     var enDrag      by remember { mutableStateOf(false) }
@@ -170,9 +172,13 @@ fun MiniPlayer(musique: MusiqueLocale) {
     Column(
         modifier = Modifier.fillMaxWidth()
             .navigationBarsPadding()
-            .padding(horizontal = 12.dp, vertical = 8.dp).
-            clip(RoundedCornerShape(16.dp))
-                .background(Color(0xEE1C1C2E))
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xEE1C1C2E))
+            .clickable(
+                onClick = {navController.navigate("LecteurAudio")}
+            )
+
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         Slider( value = progression,
@@ -321,7 +327,7 @@ fun CoverArt(albumUri: Uri?, size: Int) {
     }
 }
 @Composable
-fun Contenue( drawerState: DrawerState, scope: kotlinx.coroutines.CoroutineScope) {
+fun Contenue( drawerState: DrawerState, scope: CoroutineScope, navController: NavController) {
     val context   = LocalContext.current
     val musiques  = remember { getMusiqueLocale(context) }
     var recherche by remember { mutableStateOf("") }
@@ -383,7 +389,8 @@ fun Contenue( drawerState: DrawerState, scope: kotlinx.coroutines.CoroutineScope
                             onFavoriChange = {
                                 GestionnaireFavoris.basculer(context, musique.id)
                                 favorisIds = GestionnaireFavoris.obtenirIds(context)
-                            }
+                            },
+                            navController = navController
                         )
                         Spacer(Modifier.height(8.dp))
                     }
@@ -397,7 +404,8 @@ fun Contenue( drawerState: DrawerState, scope: kotlinx.coroutines.CoroutineScope
 fun Chason(
     musique: MusiqueLocale,
     estFavori: Boolean = false,
-    onFavoriChange: () -> Unit = {}
+    onFavoriChange: () -> Unit = {},
+    navController: NavController
 ) {
     val context = LocalContext.current
     val estCetteMusiqueActive = EtatLecture.musiqueActive?.id == musique.id
@@ -413,6 +421,7 @@ fun Chason(
                 Lecteur.jouer(context, musique)
                 EtatLecture.musiqueActive = musique
                 EtatLecture.estEnLecture  = true
+                navController.navigate("LecteurAudio")
             }
             .padding(start = 16.dp)
     ) {

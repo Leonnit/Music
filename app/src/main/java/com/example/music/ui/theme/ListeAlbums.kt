@@ -18,8 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.music.CoverArt
-import com.example.music.MusiqueLocale
+import com.example.music.screen.CoverArt
+import com.example.music.localpermission.MusiqueLocale
 import kotlin.collections.component1
 import kotlin.collections.component2
 

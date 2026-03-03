@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.music.MusiqueLocale
+import com.example.music.localpermission.MusiqueLocale
 import kotlin.collections.component1
 import kotlin.collections.component2
 

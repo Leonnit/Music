@@ -1,4 +1,4 @@
-package com.example.music
+package com.example.music.localpermission
 
 import android.Manifest
 import android.os.Build

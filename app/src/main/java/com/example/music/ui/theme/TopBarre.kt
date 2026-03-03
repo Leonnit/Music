@@ -40,10 +40,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.music.EtatLecture
-import com.example.music.Lecteur
-import com.example.music.MusiqueLocale
-import com.example.music.getMusiqueLocale
+import com.example.music.screen.EtatLecture
+import com.example.music.localpermission.Lecteur
+import com.example.music.localpermission.MusiqueLocale
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
